@@ -2,8 +2,11 @@ import React from "react";
 
 function Footer() {
   return (
-    <footer style={{ backgroundColor: "rgb(250, 250, 250)" }}>
-      <div className="container border-top mt-5">
+    <footer
+      className="border-top mt-5"
+      style={{ backgroundColor: "rgb(250, 250, 250)" }}
+    >
+      <div className="container mt-5">
         <div className="row mt-5">
           <div className="col">
             <img src="/images/logo.svg" style={{ width: "50%" }} />

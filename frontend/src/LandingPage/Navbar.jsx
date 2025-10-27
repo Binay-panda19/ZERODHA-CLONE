@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
@@ -8,7 +9,9 @@ function Navbar() {
         backgroundColor: "#FFF",
         height: "90px",
         width: "100%",
-        position: "fixed",
+        position: "sticky",
+        zIndex: "50",
+        top: "0",
       }}
     >
       <div className="container p-2">
@@ -31,10 +34,10 @@ function Navbar() {
           <form className="d-flex" role="search">
             <ul className="navbar-nav mb-lg-0">
               <li className=" text-muted">
-                <a
+                <Link
                   className="active"
                   aria-current="page"
-                  href="#"
+                  to="/signup"
                   style={{
                     textDecoration: "none",
                     paddingLeft: "48px",
@@ -43,12 +46,12 @@ function Navbar() {
                   }}
                 >
                   Signup
-                </a>
+                </Link>
               </li>
               <li className="text-muted">
-                <a
+                <Link
                   className="active"
-                  href="#"
+                  to="/about"
                   style={{
                     textDecoration: "none",
                     paddingLeft: "48px",
@@ -57,10 +60,10 @@ function Navbar() {
                   }}
                 >
                   About
-                </a>
+                </Link>
               </li>
               <li className="text-muted">
-                <a
+                <Link
                   className=" active"
                   style={{
                     textDecoration: "none",
@@ -68,13 +71,13 @@ function Navbar() {
                     fontSize: "1.2rem",
                     color: "#666",
                   }}
-                  href="#"
+                  to="/product"
                 >
                   Product
-                </a>
+                </Link>
               </li>
               <li className=" text-muted  ">
-                <a
+                <Link
                   className=" active"
                   style={{
                     textDecoration: "none",
@@ -82,13 +85,13 @@ function Navbar() {
                     fontSize: "1.2rem",
                     color: "#666",
                   }}
-                  href="#"
+                  to="/pricing"
                 >
                   Pricing
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a
+                <Link
                   className="active"
                   style={{
                     textDecoration: "none",
@@ -96,10 +99,10 @@ function Navbar() {
                     fontSize: "1.2rem",
                     color: "#666",
                   }}
-                  href="#"
+                  to="/support"
                 >
                   Support
-                </a>
+                </Link>
               </li>
             </ul>
           </form>
