@@ -3,10 +3,10 @@ import React from "react";
 function Navbar() {
   return (
     <nav
-      className="navbar navbar-expand-lg border-bottom ml-5 "
+      className="navbar navbar-expand-lg border-bottom ml-4 mb-5 p-3"
       style={{
         backgroundColor: "#FFF",
-        height: "80px",
+        height: "90px",
         width: "100%",
         position: "fixed",
       }}
@@ -26,7 +26,8 @@ function Navbar() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse " id="navbarSupportedContent">
+        <div className="col-2"></div>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <form className="d-flex" role="search">
             <ul className="navbar-nav mb-lg-0">
               <li className=" text-muted">
@@ -36,8 +37,8 @@ function Navbar() {
                   href="#"
                   style={{
                     textDecoration: "none",
-                    paddingLeft: "36px",
-                    fontSize: ".9rem",
+                    paddingLeft: "48px",
+                    fontSize: "1.2rem",
                     color: "#666",
                   }}
                 >
@@ -50,8 +51,8 @@ function Navbar() {
                   href="#"
                   style={{
                     textDecoration: "none",
-                    paddingLeft: "36px",
-                    fontSize: ".9rem",
+                    paddingLeft: "48px",
+                    fontSize: "1.2rem",
                     color: "#666",
                   }}
                 >
@@ -63,8 +64,8 @@ function Navbar() {
                   className=" active"
                   style={{
                     textDecoration: "none",
-                    paddingLeft: "36px",
-                    fontSize: ".9rem",
+                    paddingLeft: "48px",
+                    fontSize: "1.2rem",
                     color: "#666",
                   }}
                   href="#"
@@ -77,8 +78,8 @@ function Navbar() {
                   className=" active"
                   style={{
                     textDecoration: "none",
-                    paddingLeft: "36px",
-                    fontSize: ".9rem",
+                    paddingLeft: "48px",
+                    fontSize: "1.2rem",
                     color: "#666",
                   }}
                   href="#"
@@ -91,8 +92,8 @@ function Navbar() {
                   className="active"
                   style={{
                     textDecoration: "none",
-                    paddingLeft: "36px",
-                    fontSize: ".9rem",
+                    paddingLeft: "48px",
+                    fontSize: "1.2rem",
                     color: "#666",
                   }}
                   href="#"
@@ -102,6 +103,14 @@ function Navbar() {
               </li>
             </ul>
           </form>
+          <i
+            className="fa-solid fa-bars fs-4 "
+            style={{
+              paddingTop: "20px",
+              paddingBottom: "20px",
+              paddingLeft: "35px",
+            }}
+          ></i>
         </div>
       </div>
     </nav>
