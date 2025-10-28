@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
 import HomePage from "./LandingPage/Home/HomePage";
-import Pricing from "./LandingPage/Home/Pricing";
+import Pricing from "./LandingPage/Pricing/PricingPage";
 import SignUp from "./LandingPage/Signup/SignUp";
 import SupportPage from "./LandingPage/Support/SupportPage";
 import AboutPage from "./LandingPage/About/AboutPage";
