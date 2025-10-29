@@ -16,6 +16,7 @@ app.use(
     credentials: true,
   })
 );
+// app.use(bodyParser.json());
 
 // ✅ Route to insert Holdings
 // app.get("/addHoldings", async (req, res) => {
