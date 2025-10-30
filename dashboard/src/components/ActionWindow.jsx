@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import axios from "axios";
 
-import GeneralContext from "./GeneralContext";
+import GeneralContext from "../context/GeneralContext";
 
 import "./ActionWindow.css";
 import { toast } from "react-toastify";

@@ -7,6 +7,7 @@ import { Otp } from "../models/Otp.model.js";
 import bcrypt from "bcryptjs";
 import { createAccessToken, createRefreshToken } from "../utils/token.utils.js";
 import twilio from "twilio";
+import { verifyToken } from "../middlewares/verifyAuth.middleware.js";
 
 const router = express.Router();
 
@@ -259,91 +260,88 @@ router.post("/logout", async (req, res) => {
 });
 
 // get current user - tries Authorization header first, then refresh cookie
-router.get("/me", async (req, res) => {
+router.get("/me", verifyToken, async (req, res) => {
   try {
-    const auth = req.headers.authorization?.split(" ")[1];
-    if (auth) {
-      try {
-        const p = jwt.verify(auth, process.env.JWT_ACCESS_SECRET);
-        const user = await User.findById(p.sub).select("-refreshTokens");
-        return res.json({ user });
-      } catch (e) {
-        // ignore and try refresh cookie
-      }
-    }
-
-    const token = req.cookies.refreshToken;
-    if (!token) return res.json({ user: null });
-
-    try {
-      const p = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-      const user = await User.findById(p.sub).select("-refreshTokens");
-      // optionally issue a fresh access token (not necessary here)
-      return res.json({ user });
-    } catch (e) {
-      return res.json({ user: null });
-    }
+    res.json({ user: req.user });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-//email + password
-const register = async (req, res) => {
+// SIGNUP
+router.post("/email/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Check if user exists
     const existing = await User.findOne({ email });
-    if (existing) {
+    if (existing)
       return res
         .status(400)
         .json({ ok: false, message: "User already exists" });
-    }
 
-    // Create new user (include provider)
+    const hashPass = await bcrypt.hash(password, 10);
+
     const user = await User.create({
       name,
       email,
-      password,
-      provider: "email", // ✅ required
+      password: hashPass,
+      provider: "email",
     });
 
-    return res.status(201).json({
+    const token = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, {
+      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+    });
+
+    res.status(201).json({
       ok: true,
       message: "User created successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
+      user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (error) {
     console.log("SignUp error", error);
-    return res.status(500).json({ ok: false, message: "Server error" });
+    res.status(500).json({ ok: false, message: "Server error" });
   }
-};
+});
 
-router.post("/email/signup", register);
-
-const login = async (req, res) => {
+// LOGIN
+router.post("/email/login", async (req, res) => {
   try {
     const { email, password } = req.body;
+
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid email" });
+    if (!user)
+      return res.status(400).json({ message: "Invalid email or password" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid password" });
+    if (!isMatch)
+      return res.status(400).json({ message: "Invalid email or password" });
 
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "7d" });
-    res.cookie("token", token, { httpOnly: true });
-    res.status(200).json({ message: "Login successful", user });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, {
+      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+    });
+
+    res.status(200).json({
+      ok: true,
+      message: "Login successful",
+      user: { id: user._id, name: user.name, email: user.email },
+    });
   } catch (error) {
-    console.log("login error", error);
+    console.log("Login error", error);
     res.status(500).json({ message: "Server error" });
   }
-};
-router.post("/email/login", login);
+});
 
 export default router;

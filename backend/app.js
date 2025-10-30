@@ -12,9 +12,17 @@ const app = express();
 // ✅ Middleware setup
 app.use(express.json({ limit: "16kb" }));
 app.use(cookieParser());
+const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
@@ -184,6 +192,7 @@ app.use(
 //get all holdings
 
 // routes
+
 app.use("/auth", authRoutes);
 
 app.get("/allHoldings", async (req, res) => {

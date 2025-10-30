@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import ActionWindow from "./ActionWindow";
+import ActionWindow from "../components/ActionWindow";
 
 const GeneralContext = React.createContext({
   openWindow: (uid, mode) => {},

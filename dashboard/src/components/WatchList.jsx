@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material";
 
 import { watchlist } from "../data/data";
-import GeneralContext from "./GeneralContext";
+import GeneralContext from "../context/GeneralContext";
 import DoughnutGraph from "./DougnutGraph";
 
 const WatchList = () => {

@@ -49,8 +49,9 @@ export default function Signup() {
       });
 
       if (res.data.ok) {
-        toast.success(res.data.message || "Signup successful!");
-        window.location.href = "http://localhost:5173";
+        localStorage.setItem("accessToken", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        window.location.href = "http://localhost:5173"; // dashboard app
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Something went wrong");

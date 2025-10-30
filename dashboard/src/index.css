@@ -302,23 +302,6 @@ hr {
   margin-left: 20px;
 }
 
-.profile .avatar {
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  position: relative;
-  font-size: 0.7rem;
-  font-weight: 400;
-  color: rgb(221, 139, 221);
-  justify-content: center;
-  align-items: center;
-  border-radius: 100%;
-  text-align: center;
-  display: flex;
-  background: rgb(252, 229, 252);
-  margin-right: 8px;
-}
-
 .profile .username {
   font-size: 0.8rem;
   font-weight: 300;
@@ -863,16 +846,25 @@ hr {
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
-  background: #007bff;
-  color: white;
-  font-weight: bold;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 .username {
@@ -887,7 +879,7 @@ hr {
   right: 0;
   background: white;
   border-radius: 8px;
-  width: 180px;
+  width: 280px;
   padding: 8px 0;
   z-index: 1000;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -901,8 +893,8 @@ hr {
   background: transparent;
   border: none;
   text-align: left;
-  font-size: 0.9rem;
-  color: #333;
+  font-size: 1.2rem;
+  color: #6e87d6;
   transition: background 0.2s ease;
 }
 

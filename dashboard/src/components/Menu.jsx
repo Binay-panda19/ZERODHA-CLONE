@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useUser } from "../context/userContext";
+import { toast } from "react-toastify";
 
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
@@ -98,16 +100,7 @@ export default Menu;
 
 const ProfileMenu = () => {
   const [open, setOpen] = useState(false);
-  const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"; // Vite uses VITE_ prefix
-
-  const logout = async () => {
-    try {
-      await axios.post(`${API}/auth/logout`);
-      window.location.href = "http://localhost:5174";
-    } catch (error) {
-      console.log("error while logout", error);
-    }
-  };
+  const { user, logout } = useUser(); // ✅ use context
 
   return (
     <div className="profile-menu-container">
@@ -116,17 +109,22 @@ const ProfileMenu = () => {
         onClick={() => setOpen(!open)}
         role="button"
       >
-        <div className="avatar">ZU</div>
-        <span className="username">UserID</span>
+        <div className="avatar">
+          {user
+            ? user.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase()
+            : "?"}
+        </div>
+        <span className="username">{user ? user.name : "Guest"}</span>
       </div>
 
       {open && (
         <div className="dropdown-menu-custom shadow-sm">
           <button className="dropdown-item-custom">
             <FaUser className="me-2" /> Profile
-          </button>
-          <button className="dropdown-item-custom">
-            <FaCog className="me-2" /> Settings
           </button>
           <button className="dropdown-item-custom logout" onClick={logout}>
             <FaSignOutAlt className="me-2" /> Logout
