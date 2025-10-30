@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 
 import { Holding } from "./models/Holdings.model.js";
 import { Position } from "./models/Positions.model.js";
+import { Order } from "./models/Orders.model.js";
 
 const app = express();
 
@@ -180,6 +181,7 @@ app.use(
 // });
 
 //get all holdings
+
 app.get("/allHoldings", async (req, res) => {
   const allHoldings = await Holding.find({});
   res.json(allHoldings);
@@ -189,6 +191,19 @@ app.get("/allHoldings", async (req, res) => {
 app.get("/allPositions", async (req, res) => {
   const allPositions = await Position.find({});
   res.json(allPositions);
+});
+
+app.post("/newOrder", (req, res) => {
+  const order = new Order({
+    name: req.body.name,
+    qty: req.body.qty,
+    price: req.body.price,
+    mode: req.body.mode,
+  });
+
+  order.save();
+
+  res.send("Data saved to DB !!!");
 });
 
 export default app;
