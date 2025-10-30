@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { Holding } from "./models/Holdings.model.js";
 import { Position } from "./models/Positions.model.js";
 import { Order } from "./models/Orders.model.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(express.json({ limit: "16kb" }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "*",
+    origin: process.env.CLIENT_URL || "*",
     credentials: true,
   })
 );
@@ -181,6 +182,9 @@ app.use(
 // });
 
 //get all holdings
+
+// routes
+app.use("/auth", authRoutes);
 
 app.get("/allHoldings", async (req, res) => {
   const allHoldings = await Holding.find({});

@@ -1,17 +1,13 @@
 import React, { useState } from "react";
-
+import { FaUser, FaCog, FaSignOutAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
-  };
-
-  const handleProfileClick = (index) => {
-    setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
 
   const menuClass = "menu";
@@ -19,7 +15,7 @@ const Menu = () => {
 
   return (
     <div className="menu-container">
-      <img src="logo.png" style={{ width: "50px" }} />
+      <img src="/logo.png" style={{ width: "50px" }} />
       <div className="menus">
         <ul>
           <li>
@@ -90,9 +86,8 @@ const Menu = () => {
           </li>
         </ul>
         <hr />
-        <div className="profile" onClick={handleProfileClick}>
-          <div className="avatar">ZU</div>
-          <p className="username">USERID</p>
+        <div className="d-flex justify-content-end p-3 bg-light">
+          <ProfileMenu />
         </div>
       </div>
     </div>
@@ -100,3 +95,44 @@ const Menu = () => {
 };
 
 export default Menu;
+
+const ProfileMenu = () => {
+  const [open, setOpen] = useState(false);
+  const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"; // Vite uses VITE_ prefix
+
+  const logout = async () => {
+    try {
+      await axios.post(`${API}/auth/logout`);
+      window.location.href = "http://localhost:5174";
+    } catch (error) {
+      console.log("error while logout", error);
+    }
+  };
+
+  return (
+    <div className="profile-menu-container">
+      <div
+        className="profile-trigger"
+        onClick={() => setOpen(!open)}
+        role="button"
+      >
+        <div className="avatar">ZU</div>
+        <span className="username">UserID</span>
+      </div>
+
+      {open && (
+        <div className="dropdown-menu-custom shadow-sm">
+          <button className="dropdown-item-custom">
+            <FaUser className="me-2" /> Profile
+          </button>
+          <button className="dropdown-item-custom">
+            <FaCog className="me-2" /> Settings
+          </button>
+          <button className="dropdown-item-custom logout" onClick={logout}>
+            <FaSignOutAlt className="me-2" /> Logout
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};

@@ -6,6 +6,7 @@ import axios from "axios";
 import GeneralContext from "./GeneralContext";
 
 import "./ActionWindow.css";
+import { toast } from "react-toastify";
 
 const ActionWindow = ({ uid, mode }) => {
   const generalContext = useContext(GeneralContext);
@@ -21,6 +22,7 @@ const ActionWindow = ({ uid, mode }) => {
       mode,
     });
 
+    toast.success("Order Placed successfully !!");
     generalContext.closeWindow();
   };
 

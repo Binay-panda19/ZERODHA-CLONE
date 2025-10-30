@@ -11,6 +11,7 @@ import ProductPage from "./LandingPage/Products/ProductPage";
 import Navbar from "./LandingPage/Navbar";
 import Footer from "./LandingPage/Footer";
 import NotFound from "./LandingPage/NotFound";
+import { ToastContainer } from "react-toastify";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -25,6 +26,14 @@ createRoot(document.getElementById("root")).render(
         <Route path="/support" element={<SupportPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        theme="dark"
+      />
       <Footer />
     </BrowserRouter>
   </StrictMode>
