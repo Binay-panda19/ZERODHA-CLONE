@@ -1,0 +1,13 @@
+.dashboard-root {
+  all: initial;
+  font-family: "Roboto", sans-serif;
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Allow dashboard CSS to reapply inside */
+.dashboard-root * {
+  all: unset;
+  display: revert;
+}

@@ -100,7 +100,7 @@ export default Menu;
 
 const ProfileMenu = () => {
   const [open, setOpen] = useState(false);
-  const { user, logout } = useUser(); // ✅ use context
+  // const { user, logout } = useUser(); // ✅ use context
 
   return (
     <div className="profile-menu-container">
@@ -109,7 +109,7 @@ const ProfileMenu = () => {
         onClick={() => setOpen(!open)}
         role="button"
       >
-        <div className="avatar">
+        {/* <div className="avatar">
           {user
             ? user.name
                 .split(" ")
@@ -117,8 +117,8 @@ const ProfileMenu = () => {
                 .join("")
                 .toUpperCase()
             : "?"}
-        </div>
-        <span className="username">{user ? user.name : "Guest"}</span>
+        </div> */}
+        {/* <span className="username">{user ? user.name : "Guest"}</span> */}
       </div>
 
       {open && (
