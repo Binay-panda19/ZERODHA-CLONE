@@ -1,90 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useUser } from "../context/userContext"; // ✅ Correct path
 
 const Menu = () => {
-  const [selectedMenu, setSelectedMenu] = useState(0);
-
-  const handleMenuClick = (index) => {
-    setSelectedMenu(index);
-  };
-
-  const menuClass = "menu";
-  const activeMenuClass = "menu selected";
+  const location = useLocation();
+  const menuItems = [
+    { path: "/dashboard", label: "Dashboard" },
+    { path: "/dashboard/orders", label: "Orders" },
+    { path: "/dashboard/holdings", label: "Holdings" },
+    { path: "/dashboard/positions", label: "Positions" },
+    { path: "/dashboard/funds", label: "Funds" },
+    { path: "/dashboard/apps", label: "Apps" },
+  ];
 
   return (
     <div className="menu-container">
-      <img src="/images/logo.png" style={{ width: "50px" }} />
+      <img src="/images/logo.png" alt="Logo" style={{ width: "50px" }} />
+
       <div className="menus">
         <ul>
-          <li>
-            <Link
-              style={{ textDecoration: "none" }}
-              to="/dashboard"
-              onClick={() => handleMenuClick(0)}
-            >
-              <p className={selectedMenu === 0 ? activeMenuClass : menuClass}>
-                Dashboard
-              </p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              style={{ textDecoration: "none" }}
-              to="/dashboard/orders"
-              onClick={() => handleMenuClick(1)}
-            >
-              <p className={selectedMenu === 1 ? activeMenuClass : menuClass}>
-                Orders
-              </p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              style={{ textDecoration: "none" }}
-              to="/dashboard/holdings"
-              onClick={() => handleMenuClick(2)}
-            >
-              <p className={selectedMenu === 2 ? activeMenuClass : menuClass}>
-                Holdings
-              </p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              style={{ textDecoration: "none" }}
-              to="/dashboard/positions"
-              onClick={() => handleMenuClick(3)}
-            >
-              <p className={selectedMenu === 3 ? activeMenuClass : menuClass}>
-                Positions
-              </p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              style={{ textDecoration: "none" }}
-              to="/dashboard/funds"
-              onClick={() => handleMenuClick(4)}
-            >
-              <p className={selectedMenu === 4 ? activeMenuClass : menuClass}>
-                Funds
-              </p>
-            </Link>
-          </li>
-          <li>
-            <Link
-              style={{ textDecoration: "none" }}
-              to="/dashboard/apps"
-              onClick={() => handleMenuClick(6)}
-            >
-              <p className={selectedMenu === 6 ? activeMenuClass : menuClass}>
-                Apps
-              </p>
-            </Link>
-          </li>
+          {menuItems.map((item, index) => (
+            <li key={index}>
+              <Link
+                to={item.path}
+                style={{ textDecoration: "none" }}
+                className={
+                  location.pathname === item.path ? "menu selected" : "menu"
+                }
+              >
+                {item.label}
+              </Link>
+            </li>
+          ))}
         </ul>
+
         <hr />
+
         <div className="d-flex justify-content-end p-3 bg-light">
           <ProfileMenu />
         </div>
@@ -95,27 +47,39 @@ const Menu = () => {
 
 export default Menu;
 
+// ===================== PROFILE MENU ===================== //
 const ProfileMenu = () => {
   const [open, setOpen] = useState(false);
-  // const { user, logout } = useUser(); // ✅ use context
+  const { user, logout } = useUser();
+  const menuRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <div className="profile-menu-container">
+    <div ref={menuRef} className="profile-menu-container">
       <div
         className="profile-trigger"
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpen((prev) => !prev)}
         role="button"
       >
-        {/* <div className="avatar">
-          {user
+        <div className="avatar">
+          {user?.name
             ? user.name
                 .split(" ")
                 .map((n) => n[0])
                 .join("")
                 .toUpperCase()
             : "?"}
-        </div> */}
-        {/* <span className="username">{user ? user.name : "Guest"}</span> */}
+        </div>
+        <span className="username">{user?.name || "Guest"}</span>
       </div>
 
       {open && (

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useUser } from "../../dashboard/context/userContext";
 
 const API = "http://localhost:5000";
 
@@ -15,6 +17,8 @@ export default function Signup() {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  const { loginSuccess } = useUser();
 
   const handleGoogleAuth = () => {
     window.location.href = `${API}/auth/google`;
@@ -48,12 +52,22 @@ export default function Signup() {
         withCredentials: true,
       });
 
-      if (res.data.ok) {
+      if (res.data.token) {
         localStorage.setItem("accessToken", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        window.location.href = "http://localhost:5173"; // dashboard app
+      }
+
+      // ✅ Most backends return `success` or 200 status
+      if (res.data.success || res.status === 200) {
+        loginSuccess(res.data.user);
+        toast.success("Logged in successfully!");
+
+        // ✅ small delay to ensure cookies persist before redirect
+        setTimeout(() => navigate("/dashboard"), 500);
+      } else {
+        toast.error(res.data.message || "Authentication failed");
       }
     } catch (err) {
+      console.error("Login error:", err.response?.data || err.message);
       toast.error(err.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
@@ -94,7 +108,7 @@ export default function Signup() {
       );
       if (res.data.ok) {
         setMessage(`${authMode === "signup" ? "Signup" : "Login"} successful!`);
-        window.location.href = "http://localhost:5173";
+        navigate("/dashboard"); // dashboard app
       }
     } catch (err) {
       setMessage(err.response?.data?.error || "Verification failed");

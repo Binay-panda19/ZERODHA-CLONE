@@ -12,7 +12,6 @@ import SupportPage from "./LandingPage/Support/SupportPage";
 import AboutPage from "./LandingPage/About/AboutPage";
 import SignUp from "./LandingPage/Signup/SignUp";
 import NotFound from "./LandingPage/NotFound";
-// import Home from "./dashboard/components/Home";
 const DashboardApp = React.lazy(() => import("./dashboard/components/Home"));
 
 // Common layout components

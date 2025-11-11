@@ -3,41 +3,28 @@ import { User } from "../models/User.model.js";
 
 export const verifyToken = async (req, res, next) => {
   try {
-    // 1️⃣ Try reading from Authorization header
-    let token = null;
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      token = authHeader.split(" ")[1];
-    }
+    // ✅ 1. Check cookie
+    const token = req.cookies?.token;
 
-    // 2️⃣ Or from cookie (frontend sends cookies automatically withCredentials)
-    if (!token && req.cookies?.token) {
-      token = req.cookies.token;
-    }
-
+    // console.log("Incoming cookies:", req.cookies);
     if (!token) {
-      return res.status(401).json({ message: "No token provided" });
+      return res.status(401).json({ message: "No token found in cookies" });
     }
 
-    // 3️⃣ Verify token
+    // ✅ 2. Verify token
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
-    // 4️⃣ Find the user
-    const user = await User.findById(decoded.id).select(
-      "-password -refreshTokens"
-    );
+    // ✅ 3. Fetch user
+    const user = await User.findById(decoded.id).select("-password");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    req.user = user; // attach user to request
+    // ✅ 4. Attach and continue
+    req.user = user;
     next();
-  } catch (error) {
-    if (error.name === "TokenExpiredError") {
-      return res.status(403).json({ message: "Refresh token expired" });
-    }
-
-    console.error("Auth middleware error:", error);
+  } catch (err) {
+    console.error("Auth middleware error:", err.message);
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 };

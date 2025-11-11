@@ -248,8 +248,8 @@ router.post("/logout", async (req, res) => {
     // clear cookie
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: false,
+      sameSite: "none",
     });
 
     return res.json({ message: "Logout successful" });
@@ -262,10 +262,11 @@ router.post("/logout", async (req, res) => {
 // get current user - tries Authorization header first, then refresh cookie
 router.get("/me", verifyToken, async (req, res) => {
   try {
-    res.json({ user: req.user });
+    const user = req.user; // already attached in verifyToken
+    return res.status(200).json({ success: true, user });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error fetching user:", err);
+    res.status(500).json({ success: false, message: "Failed to fetch user" });
   }
 });
 
@@ -295,11 +296,12 @@ router.post("/email/signup", async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: false,
       sameSite: "none",
     });
 
     res.status(201).json({
+      token: token,
       ok: true,
       message: "User created successfully",
       user: { id: user._id, name: user.name, email: user.email },
@@ -329,7 +331,7 @@ router.post("/email/login", async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: false,
       sameSite: "none",
     });
 

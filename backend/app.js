@@ -12,21 +12,15 @@ const app = express();
 // ✅ Middleware setup
 app.use(express.json({ limit: "16kb" }));
 app.use(cookieParser());
-const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
+    origin: "http://localhost:5173", // Your frontend
+    credentials: true, // Important: allows cookies to be sent
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-// app.use(bodyParser.json());
 
 // ✅ Route to insert Holdings
 // app.get("/addHoldings", async (req, res) => {
