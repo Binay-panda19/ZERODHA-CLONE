@@ -11,50 +11,43 @@ const UserProvider = ({ children }) => {
   const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
   const navigate = useNavigate();
 
+  // ✅ Load user on mount using stored JWT
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem("user"));
-    setUser(savedUser);
-    // console.log(user);
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get(`${API}/auth/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.data?.user) {
+          setUser(res.data.user);
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+        }
+      } catch (err) {
+        console.error("Auth error:", err.response?.data || err.message);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
   }, []);
 
-  // ✅ Fetch user using cookie on mount
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const res = await axios.get(`${API}/auth/me`, {
-  //         withCredentials: true,
-  //       });
-  //       if (res.data?.user) {
-  //         setUser(res.data.user);
-  //       }
-  //     } catch (err) {
-  //       // console.warn(
-  //       //   "No valid session found:",
-  //       //   err.response?.data || err.message
-  //       // );
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchUser();
-  // }, []);
-
-  // ✅ Called when user successfully logs in
-  // const handleLoginSuccess = (userData) => {
-  //   setUser(userData);
-  // };
-
-  // ✅ Logout clears cookie + resets state
-  const handleLogout = async () => {
-    try {
-      await axios.post(`${API}/auth/logout`, {}, { withCredentials: true });
-    } catch (err) {
-      console.error("Logout error:", err.message);
-    } finally {
-      setUser(null);
-      navigate("/signup");
-    }
+  // ✅ Manual logout (just clears localStorage)
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/signup");
   };
 
   return (

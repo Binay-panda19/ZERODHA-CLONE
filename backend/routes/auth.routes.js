@@ -223,43 +223,18 @@ router.post("/refresh", async (req, res) => {
   }
 });
 
-//logout
+// ---------------- LOGOUT ----------------
+// ✅ With JWT in headers, logout is purely client-side now.
 router.post("/logout", async (req, res) => {
   try {
-    const token = req.cookies?.refreshToken;
-    if (!token) return res.status(200).json({ message: "Logged out" }); // no token, nothing to do
-
-    let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-    } catch {
-      // invalid/expired token
-      res.clearCookie("refreshToken");
-      return res.status(200).json({ message: "Logged out" });
-    }
-
-    // find user and remove that refresh token
-    const user = await User.findById(decoded.sub);
-    if (user) {
-      user.refreshTokens = user.refreshTokens.filter((t) => t.token !== token);
-      await user.save();
-    }
-
-    // clear cookie
-    res.clearCookie("refreshToken", {
-      httpOnly: true,
-      secure: false,
-      sameSite: "none",
-    });
-
-    return res.json({ message: "Logout successful" });
+    return res.status(200).json({ message: "Logout successful (client-side)" });
   } catch (err) {
     console.error("Logout error:", err);
     return res.status(500).json({ error: "Server error" });
   }
 });
 
-// get current user - tries Authorization header first, then refresh cookie
+// ---------------- GET CURRENT USER ----------------
 router.get("/me", verifyToken, async (req, res) => {
   try {
     const user = req.user; // already attached in verifyToken
@@ -270,16 +245,17 @@ router.get("/me", verifyToken, async (req, res) => {
   }
 });
 
-// SIGNUP
+// ---------------- SIGNUP ----------------
 router.post("/email/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
     const existing = await User.findOne({ email });
-    if (existing)
+    if (existing) {
       return res
         .status(400)
         .json({ ok: false, message: "User already exists" });
+    }
 
     const hashPass = await bcrypt.hash(password, 10);
 
@@ -290,29 +266,25 @@ router.post("/email/signup", async (req, res) => {
       provider: "email",
     });
 
+    // ✅ Create token
     const token = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, {
-      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
+      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1d",
     });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "none",
-    });
-
+    // ✅ Return token + user directly
     res.status(200).json({
-      token: token,
       success: true,
       message: "User created successfully",
+      token,
       user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (error) {
-    console.log("SignUp error", error);
+    console.error("SignUp error", error);
     res.status(500).json({ ok: false, message: "Server error" });
   }
 });
 
-// LOGIN
+// ---------------- LOGIN ----------------
 router.post("/email/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -325,25 +297,21 @@ router.post("/email/login", async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Invalid email or password" });
 
+    // ✅ Create token
     const token = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, {
-      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
+      expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1d",
     });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "none",
-    });
-
+    // ✅ Return token + user directly (no cookie)
     res.status(200).json({
       ok: true,
       message: "Login successful",
+      token,
       user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (error) {
-    console.log("Login error", error);
+    console.error("Login error", error);
     res.status(500).json({ message: "Server error" });
   }
 });
-
 export default router;

@@ -15,7 +15,7 @@ const ActionWindow = ({ uid, mode }) => {
   const [stockPrice, setStockPrice] = useState(0.0);
 
   const handleClick = () => {
-    axios.post("http://localhost:5000/newOrder", {
+    axios.post("http://localhost:5000/orders/create", {
       name: uid,
       qty: stockQuantity,
       price: stockPrice,

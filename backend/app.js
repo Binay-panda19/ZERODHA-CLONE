@@ -6,6 +6,7 @@ import { Holding } from "./models/Holdings.model.js";
 import { Position } from "./models/Positions.model.js";
 import { Order } from "./models/Orders.model.js";
 import authRoutes from "./routes/auth.routes.js";
+import orderRoutes from "./routes/order.routes.js";
 
 const app = express();
 
@@ -188,6 +189,7 @@ app.use(
 // routes
 
 app.use("/auth", authRoutes);
+app.use("/orders", orderRoutes);
 
 app.get("/allHoldings", async (req, res) => {
   const allHoldings = await Holding.find({});
@@ -200,17 +202,17 @@ app.get("/allPositions", async (req, res) => {
   res.json(allPositions);
 });
 
-app.post("/newOrder", (req, res) => {
-  const order = new Order({
-    name: req.body.name,
-    qty: req.body.qty,
-    price: req.body.price,
-    mode: req.body.mode,
-  });
+// app.post("/newOrder", (req, res) => {
+//   const order = new Order({
+//     name: req.body.name,
+//     qty: req.body.qty,
+//     price: req.body.price,
+//     mode: req.body.mode,
+//   });
 
-  order.save();
+//   order.save();
 
-  res.send("Data saved to DB !!!");
-});
+//   res.send("Data saved to DB !!!");
+// });
 
 export default app;

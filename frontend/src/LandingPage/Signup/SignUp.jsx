@@ -18,7 +18,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { loginSuccess } = useUser();
+  const { setUser } = useUser();
 
   const handleGoogleAuth = () => {
     window.location.href = `${API}/auth/google`;
@@ -48,25 +48,19 @@ export default function Signup() {
       const payload =
         authMode === "signup" ? { name, email, password } : { email, password };
 
-      const res = await axios.post(endpoint, payload, {
-        withCredentials: true,
-      });
+      const res = await axios.post(endpoint, payload);
 
+      // ✅ Save token & user info
       if (res.data.token) {
         localStorage.setItem("accessToken", res.data.token);
       }
-
-      // ✅ Most backends return `success` or 200 status
-      if (res.data.success || res.status === 200) {
+      if (res.data.user) {
         localStorage.setItem("user", JSON.stringify(res.data.user));
-
-        console.log(res.data.user);
-        // loginSuccess(res.data.user);
-        toast.success("Redirecting to Dashboard");
-
-        // ✅ small delay to ensure cookies persist before redirect
-        setTimeout(() => navigate("/dashboard"), 500);
+        setUser(res.data.user);
       }
+
+      toast.success("Redirecting to Dashboard");
+      setTimeout(() => navigate("/dashboard"), 500);
     } catch (err) {
       console.error("Login error:", err.response?.data || err.message);
       toast.error(err.response?.data?.message || "Something went wrong");
@@ -86,7 +80,7 @@ export default function Signup() {
       const res = await axios.post(`${API}/auth/phone/request-otp`, { phone });
       if (res.data.ok) {
         setStep("verify");
-        setMessage("OTP sent! (check console if in dev)");
+        setMessage("OTP sent!");
       }
     } catch (err) {
       setMessage(err.response?.data?.error || "Failed to send OTP");
@@ -102,14 +96,19 @@ export default function Signup() {
     setMessage("");
 
     try {
-      const res = await axios.post(
-        `${API}/auth/phone/verify-otp`,
-        { phone, otp },
-        { withCredentials: true }
-      );
-      if (res.data.ok) {
-        setMessage(`${authMode === "signup" ? "Signup" : "Login"} successful!`);
-        navigate("/dashboard"); // dashboard app
+      const res = await axios.post(`${API}/auth/phone/verify-otp`, {
+        phone,
+        otp,
+      });
+
+      if (res.data.ok && res.data.token) {
+        localStorage.setItem("accessToken", res.data.token);
+        if (res.data.user) {
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+          setUser(res.data.user);
+        }
+        toast.success("Verification successful!");
+        navigate("/dashboard");
       }
     } catch (err) {
       setMessage(err.response?.data?.error || "Verification failed");
