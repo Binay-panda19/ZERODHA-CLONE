@@ -1,17 +1,4 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-
+export const dashboardStyles = `
 .dashboard-container {
   width: 100%;
   height: 90vh;
@@ -59,7 +46,7 @@ code {
   background: #4184f3;
 }
 
-.row {
+.dash-row {
   width: 100%;
   display: flex;
   align-items: center;
@@ -67,12 +54,12 @@ code {
   margin-top: 5%;
 }
 
-.col {
+.dash-col {
   flex-basis: 48%;
   text-align: left;
 }
 
-.col span {
+.dashcol span {
   display: flex;
   align-items: center;
   margin-bottom: 2%;
@@ -86,7 +73,7 @@ code {
   margin-right: 10px;
 }
 
-.col span p {
+.dash-col span p {
   display: inline-block;
   font-size: 1.2rem;
   font-weight: 300;
@@ -211,36 +198,36 @@ code {
   color: rgb(250, 118, 78);
 }
 
-.row {
+.dash-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 5%;
 }
 
-.col {
+.dash-col {
   flex-basis: 33%;
 }
 
-.col h5 {
+.dash-col h5 {
   font-size: 1.8rem;
   color: rgb(71, 71, 71);
   font-weight: 300;
 }
 
-.col h5 span {
+.dash-col h5 span {
   font-weight: 300;
   font-size: 0.9rem;
 }
 
-.col p {
+.dash-col p {
   font-size: 0.8rem;
   color: rgb(153, 153, 153);
   font-weight: 300;
   margin-top: 2%;
 }
 
-.row .col:last-child h5 {
+.dash-row .col:last-child h5 {
   color: rgb(72, 194, 55);
 }
 
@@ -250,11 +237,12 @@ code {
 }
 
 .menu-container {
+  display: flex;
+  margin-top:20px;
   flex-basis: 68%;
   height: 100%;
   padding: 10px 20px;
   box-sizing: border-box;
-  display: flex;
   align-items: center;
   justify-content: space-between;
 }
@@ -281,7 +269,7 @@ code {
 }
 
 .menu {
-  font-size: 0.8rem;
+  font-size: 1.5rem;
   font-weight: 400;
   color: rgb(70, 70, 70);
 }
@@ -422,36 +410,36 @@ hr {
   color: rgb(250, 118, 78);
 }
 
-.row {
+.dash-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 5%;
 }
 
-.col {
+.dash-col {
   flex-basis: 33%;
 }
 
-.col h5 {
+.dash-col h5 {
   font-size: 1.8rem;
   color: rgb(71, 71, 71);
   font-weight: 300;
 }
 
-.col h5 span {
+.dash-col h5 span {
   font-weight: 300;
   font-size: 0.9rem;
 }
 
-.col p {
+.dash-col p {
   font-size: 0.8rem;
   color: rgb(153, 153, 153);
   font-weight: 300;
   margin-top: 2%;
 }
 
-.row .col:last-child h5 {
+.dash-row .dash-col:last-child h5 {
   color: rgb(72, 194, 55);
 }
 
@@ -909,3 +897,4 @@ hr {
 .logout:hover {
   background: #ffe3e3;
 }
+`;

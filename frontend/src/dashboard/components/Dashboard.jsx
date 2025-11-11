@@ -7,6 +7,7 @@ import Positions from "./Positions";
 import Summary from "./Summary";
 import WatchList from "./WatchList";
 import { GeneralContextProvider } from "../context/GeneralContext";
+import { dashboardStyles } from "../dashboardstyles.js";
 
 function Dashboard() {
   return (
@@ -25,6 +26,7 @@ function Dashboard() {
           <Route path="/apps" element={<Apps />} />
         </Routes>
       </div>
+      <style>{dashboardStyles}</style>
     </div>
   );
 }

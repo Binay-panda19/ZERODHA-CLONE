@@ -1,7 +1,8 @@
-import { StrictMode } from "react";
+import React, { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import "./index.css";
+import Loader from "./dashboard/components/Loader";
 
 // Landing pages
 import HomePage from "./LandingPage/Home/HomePage";
@@ -12,6 +13,7 @@ import AboutPage from "./LandingPage/About/AboutPage";
 import SignUp from "./LandingPage/Signup/SignUp";
 import NotFound from "./LandingPage/NotFound";
 // import Home from "./dashboard/components/Home";
+const DashboardApp = React.lazy(() => import("./dashboard/components/Home"));
 
 // Common layout components
 import Navbar from "./LandingPage/Navbar";
@@ -53,6 +55,16 @@ createRoot(document.getElementById("root")).render(
 
           {/* 🔹 Example future dashboard route */}
           {/* <Route path="/dashboard/*" element={<Home />} /> */}
+          <Route
+            path="/dashboard/*"
+            element={
+              <Suspense
+                fallback={<Loader text="Preparing your dashboard..." />}
+              >
+                <DashboardApp />
+              </Suspense>
+            }
+          />
 
           {/* 🔹 Fallback for 404 */}
           <Route path="*" element={<NotFound />} />
