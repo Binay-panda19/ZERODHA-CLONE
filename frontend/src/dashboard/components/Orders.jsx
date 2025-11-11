@@ -9,19 +9,30 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        toast.error("No token found, please log in again");
+        return;
+      }
+
       const res = await axios.get(`${API}/orders/get`, {
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
       if (res.data.success) setOrders(res.data.orders);
     } catch (err) {
-      console.error("Error fetching orders:", err);
+      console.error(
+        "Error fetching orders:",
+        err.response?.data || err.message
+      );
       toast.error("Failed to fetch orders");
     }
   };
 
   useEffect(() => {
     fetchOrders();
-
     // optional auto-refresh every 10 seconds
     const interval = setInterval(fetchOrders, 10000);
     return () => clearInterval(interval);

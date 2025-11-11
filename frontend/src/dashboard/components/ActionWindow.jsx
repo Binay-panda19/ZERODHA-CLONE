@@ -1,76 +1,110 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
-
-import axios from "axios";
-
-import GeneralContext from "../context/GeneralContext";
-
-import "./ActionWindow.css";
 import { toast } from "react-toastify";
+import { X } from "lucide-react"; // icon for close
+import axios from "axios";
+import GeneralContext from "../context/GeneralContext";
+import "./ActionWindow.css";
+
+const API = "http://localhost:5000";
 
 const ActionWindow = ({ uid, mode }) => {
   const generalContext = useContext(GeneralContext);
-
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
+  const [loading, setLoading] = useState(false);
 
-  const handleClick = () => {
-    axios.post("http://localhost:5000/orders/create", {
-      name: uid,
-      qty: stockQuantity,
-      price: stockPrice,
-      mode,
-    });
+  const handleClick = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        toast.error("Please login first!");
+        return;
+      }
 
-    toast.success("Order Placed successfully !!");
-    generalContext.closeWindow();
-  };
+      setLoading(true);
 
-  const handleCancelClick = () => {
-    generalContext.closeWindow();
+      await axios.post(
+        `${API}/orders/create`,
+        {
+          name: uid,
+          qty: Number(stockQuantity),
+          price: Number(stockPrice),
+          mode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success(`${mode} order placed successfully!`);
+      generalContext.closeWindow();
+    } catch (err) {
+      console.error("Error placing order:", err);
+      toast.error("Failed to place order");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="container" id="buy-window" draggable="true">
-      <div className="regular-order">
-        <h2>{uid}</h2>
-        <div className="inputs">
-          <fieldset>
-            <legend>Qty.</legend>
-            <input
-              type="number"
-              name="qty"
-              id="qty"
-              onChange={(e) => setStockQuantity(e.target.value)}
-              value={stockQuantity}
-            />
-          </fieldset>
-          <fieldset>
-            <legend>Price</legend>
-            <input
-              type="number"
-              name="price"
-              id="price"
-              step="0.05"
-              onChange={(e) => setStockPrice(e.target.value)}
-              value={stockPrice}
-            />
-          </fieldset>
+    <div className="action-window-overlay">
+      <div className="action-window-card">
+        <div className="action-header">
+          <h2 className={mode === "BUY" ? "buy-title" : "sell-title"}>
+            {mode === "BUY" ? "Buy" : "Sell"} {uid}
+          </h2>
+          <X className="close-icon" onClick={generalContext.closeWindow} />
         </div>
-      </div>
 
-      <div className="buttons">
-        <span>Margin required ₹140.65</span>
-        <div>
-          <Link
-            className={`btn ${mode === "BUY" ? "btn btn-blue" : "btn btn-red"}`}
+        <div className="action-body">
+          <div className="input-group">
+            <label>Quantity</label>
+            <input
+              type="number"
+              min="1"
+              value={stockQuantity}
+              onChange={(e) => setStockQuantity(e.target.value)}
+            />
+          </div>
+
+          <div className="input-group">
+            <label>Price (₹)</label>
+            <input
+              type="number"
+              step="0.05"
+              value={stockPrice}
+              onChange={(e) => setStockPrice(e.target.value)}
+            />
+          </div>
+
+          <div className="margin-info">
+            Estimated Margin:{" "}
+            <strong>₹{(stockQuantity * stockPrice).toFixed(2)}</strong>
+          </div>
+        </div>
+
+        <div className="action-footer">
+          <button
+            className={`btn ${mode === "BUY" ? "btn-buy" : "btn-sell"}`}
             onClick={handleClick}
+            disabled={loading}
           >
-            {mode}
-          </Link>
-          <Link to="" className="btn btn-grey" onClick={handleCancelClick}>
+            {loading
+              ? mode === "BUY"
+                ? "Buying..."
+                : "Selling..."
+              : mode === "BUY"
+              ? "Buy Now"
+              : "Sell Now"}
+          </button>
+          <button
+            className="btn btn-cancel"
+            onClick={generalContext.closeWindow}
+          >
             Cancel
-          </Link>
+          </button>
         </div>
       </div>
     </div>
