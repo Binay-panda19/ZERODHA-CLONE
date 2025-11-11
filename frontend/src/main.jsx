@@ -77,7 +77,7 @@ createRoot(document.getElementById("root")).render(
         hideProgressBar={false}
         newestOnTop={true}
         closeOnClick
-        theme="dark"
+        theme="light"
       />
     </BrowserRouter>
   </StrictMode>

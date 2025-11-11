@@ -15,115 +15,115 @@ export const dashboardStyles = `
   padding: 3% 2%;
 }
 
-.funds {
-  width: 100%;
-  text-align: right;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
+// .funds {
+//   width: 100%;
+//   text-align: right;
+//   display: flex;
+//   align-items: center;
+//   justify-content: flex-end;
+// }
 
-.funds p {
-  font-size: 0.8rem;
-  color: rgb(179, 179, 179);
-  margin-right: 8px;
-}
+// .funds p {
+//   font-size: 0.8rem;
+//   color: rgb(179, 179, 179);
+//   margin-right: 8px;
+// }
 
-.btn {
-  text-decoration: none;
-  padding: 10px 20px;
-  border-radius: 2px;
-  color: #fff;
-  margin-right: 2px;
-  margin-left: 2px;
-}
+// .btn {
+//   text-decoration: none;
+//   padding: 10px 20px;
+//   border-radius: 2px;
+//   color: #fff;
+//   margin-right: 2px;
+//   margin-left: 2px;
+// }
 
-.btn-green {
-  background: #4caf50;
-}
+// .btn-green {
+//   background: #4caf50;
+// }
 
-.btn-blue {
-  background: #4184f3;
-}
+// .btn-blue {
+//   background: #4184f3;
+// }
 
-.dash-row {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  margin-top: 5%;
-}
+// .dash-row {
+//   width: 100%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-evenly;
+//   margin-top: 5%;
+// }
 
-.dash-col {
-  flex-basis: 48%;
-  text-align: left;
-}
+// .dash-col {
+//   flex-basis: 48%;
+//   text-align: left;
+// }
 
-.dashcol span {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2%;
-}
+// .dashcol span {
+//   display: flex;
+//   align-items: center;
+//   margin-bottom: 2%;
+// }
 
-.section-icon {
-  transform: scale(0.8);
-  color: rgb(66, 56, 56);
-  padding: 0;
-  margin: 0;
-  margin-right: 10px;
-}
+// .section-icon {
+//   transform: scale(0.8);
+//   color: rgb(66, 56, 56);
+//   padding: 0;
+//   margin: 0;
+//   margin-right: 10px;
+// }
 
-.dash-col span p {
-  display: inline-block;
-  font-size: 1.2rem;
-  font-weight: 300;
-}
+// .dash-col span p {
+//   display: inline-block;
+//   font-size: 1.2rem;
+//   font-weight: 300;
+// }
 
-.table {
-  border: 1px solid #ddd;
-  padding: 5% 8%;
-}
+// .table {
+//   border: 1px solid #ddd;
+//   padding: 5% 8%;
+// }
 
-.table .data {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+// .table .data {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+// }
 
-.table .data > * {
-  margin-bottom: 5%;
-}
+// .table .data > * {
+//   margin-bottom: 5%;
+// }
 
-.table .data p:first-child {
-  font-size: 1rem;
-  color: rgb(151, 151, 151);
-}
+// .table .data p:first-child {
+//   font-size: 1rem;
+//   color: rgb(151, 151, 151);
+// }
 
-.imp {
-  font-size: 1.5rem;
-  color: #313131;
-}
+// .imp {
+//   font-size: 1.5rem;
+//   color: #313131;
+// }
 
-.colored {
-  color: #4184f3;
-}
+// .colored {
+//   color: #4184f3;
+// }
 
-.table hr {
-  border: none;
-  background: #d1d1d1;
-  height: 0.5px;
-  margin-bottom: 5%;
-}
+// .table hr {
+//   border: none;
+//   background: #d1d1d1;
+//   height: 0.5px;
+//   margin-bottom: 5%;
+// }
 
-.commodity {
-  padding: 2% 8%;
-  text-align: center;
-}
+// .commodity {
+//   padding: 2% 8%;
+//   text-align: center;
+// }
 
-.commodity p {
-  margin-bottom: 10%;
-  color: #c9c9c9;
-}
+// .commodity p {
+//   margin-bottom: 10%;
+//   color: #c9c9c9;
+// }
 
 /* sudo selectors */
 .btn-blue:hover {

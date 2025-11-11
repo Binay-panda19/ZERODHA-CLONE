@@ -58,13 +58,14 @@ export default function Signup() {
 
       // ✅ Most backends return `success` or 200 status
       if (res.data.success || res.status === 200) {
-        loginSuccess(res.data.user);
-        toast.success("Logged in successfully!");
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+
+        console.log(res.data.user);
+        // loginSuccess(res.data.user);
+        toast.success("Redirecting to Dashboard");
 
         // ✅ small delay to ensure cookies persist before redirect
         setTimeout(() => navigate("/dashboard"), 500);
-      } else {
-        toast.error(res.data.message || "Authentication failed");
       }
     } catch (err) {
       console.error("Login error:", err.response?.data || err.message);

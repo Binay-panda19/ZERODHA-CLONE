@@ -1,13 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./Funds.css";
 
 const Funds = () => {
   return (
     <>
       <div className="funds">
         <p>Instant, zero-cost fund transfers with UPI </p>
-        <Link className="btn btn-green">Add funds</Link>
-        <Link className="btn btn-blue">Withdraw</Link>
+        <Link className="fund-btn fund-btn-green">Add funds</Link>
+        <Link className="fund-btn fund-btn-blue">Withdraw</Link>
       </div>
 
       <div className="row">
@@ -73,12 +74,13 @@ const Funds = () => {
             </div>
           </div>
         </div>
-
-        <div className="col">
-          <div className="commodity">
-            <p>You don't have a commodity account</p>
-            <Link className="btn btn-blue">Open Account</Link>
-          </div>
+      </div>
+      <div className="col">
+        <div className="commodity">
+          <p style={{ color: "#000000", marginBottom: "1rem" }}>
+            You don't have a commodity account
+          </p>
+          <Link className="btn btn-blue">Open Account</Link>
         </div>
       </div>
     </>

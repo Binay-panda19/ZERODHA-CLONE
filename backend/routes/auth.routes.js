@@ -300,9 +300,9 @@ router.post("/email/signup", async (req, res) => {
       sameSite: "none",
     });
 
-    res.status(201).json({
+    res.status(200).json({
       token: token,
-      ok: true,
+      success: true,
       message: "User created successfully",
       user: { id: user._id, name: user.name, email: user.email },
     });
